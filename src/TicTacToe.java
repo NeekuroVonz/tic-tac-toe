@@ -11,6 +11,7 @@ public class TicTacToe implements ActionListener {
     JLabel textField = new JLabel();
     JButton[] buttons = new JButton[9];
     boolean player1Turn;
+    int[][] winCombNums = {{0,1,2},{3,4,5},{6,7,8}, {0,3,6},{1,4,7},{2,5,8}, {0,4,8},{2,4,6}};
 
     TicTacToe() {
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -32,12 +33,13 @@ public class TicTacToe implements ActionListener {
         buttonPanel.setLayout(new GridLayout(3, 3));
         buttonPanel.setBackground(new Color(150, 150, 150));
         
-        for (int i = 0; i < 9; i++) {
+        for (int i = 0; i < buttons.length; i++) {
             buttons[i] = new JButton();
             buttonPanel.add(buttons[i]);
             buttons[i].setFont(new Font("MV Boli", Font.BOLD, 120));
             buttons[i].setFocusable(false);
             buttons[i].addActionListener(this);
+            buttons[i].setEnabled(false);
         }
 
         titlePanel.add(textField);
@@ -49,7 +51,7 @@ public class TicTacToe implements ActionListener {
 
     @Override
     public void actionPerformed(ActionEvent e) {
-        for (int i = 0; i < 9; i++) {
+        for (int i = 0; i < buttons.length; i++) {
             if (e.getSource() == buttons[i]) {
                 if (player1Turn) {
                     if (buttons[i].getText().equals("")) {
@@ -73,14 +75,14 @@ public class TicTacToe implements ActionListener {
     }
 
     public void firstTurn() {
-        buttonPanel.setEnabled(false);
         try {
             Thread.sleep(2000);
         } catch (InterruptedException e) {
-            // TODO Auto-generated catch block
             e.printStackTrace();
         }
-        buttonPanel.setEnabled(true);
+        for (int i = 0; i < buttons.length; i++) {
+            buttons[i].setEnabled(true);
+        }
 
         if (random.nextInt(2) == 0) {
             player1Turn = true;
@@ -92,7 +94,10 @@ public class TicTacToe implements ActionListener {
     }
 
     public void check() {
-        for (int i = 0; i < 9; i++) {
+        for (int i = 0; i < winCombNums.length; i++) {
+            for (int j = 0; j < winCombNums[i].length; j++) {
+                
+            }
             if (buttons[i].getText().equals("X")) {
 
             }
