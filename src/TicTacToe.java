@@ -1,6 +1,8 @@
 import java.awt.*;
 import java.awt.event.*;
 import java.util.*;
+import java.util.List;
+
 import javax.swing.*;
 
 public class TicTacToe implements ActionListener {
@@ -11,9 +13,44 @@ public class TicTacToe implements ActionListener {
     JLabel textField = new JLabel();
     JButton[] buttons = new JButton[9];
     boolean player1Turn;
-    int[][] winCombNums = {{0,1,2},{3,4,5},{6,7,8}, {0,3,6},{1,4,7},{2,5,8}, {0,4,8},{2,4,6}};
+    // int[][] winCombNumsNums = {{0,1,2},{3,4,5},{6,7,8}, {0,3,6},{1,4,7},{2,5,8}, {0,4,8},{2,4,6}};
+    Integer[] horizontalComb = {0,1,2};
+    Integer[] verticalComb = {0,3,6};
+    Integer[] specialComb1 = {0,4,8};
+    Integer[] specialComb2 = {2,4,6};
+    List<Integer[]> winCombNums = new ArrayList<>();
+    List<Integer> player1 = new ArrayList<>();
+    List<Integer> player2 = new ArrayList<>();
 
     TicTacToe() {
+        winCombNums.add(horizontalComb.clone());
+        for (int i = 0; i < winCombNums.size(); i++) {
+            Integer[] temp;
+            if (!winCombNums.isEmpty() && winCombNums.size() < 3) {
+                for (int j = 0; j < horizontalComb.length; j++) {
+                    horizontalComb[j] += 3;
+                }
+                temp = horizontalComb.clone();
+                winCombNums.add(temp);
+                if (winCombNums.size() == 3) {
+                    winCombNums.add(verticalComb.clone());
+                }
+            } else {
+                for (int j = 0; j < verticalComb.length; j++) {
+                    verticalComb[j] += 1;
+                }
+                temp = verticalComb.clone();
+                if (winCombNums.size() >= 6) {
+                    winCombNums.add(specialComb1);
+                    winCombNums.add(specialComb2);
+                    break;
+                } else {
+                    winCombNums.add(temp);
+                }
+            }
+        }
+        System.out.println(Arrays.deepToString(winCombNums.toArray()));
+
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         frame.setSize(800, 800);
         frame.getContentPane().setBackground(new Color(255, 50, 50));
@@ -57,17 +94,19 @@ public class TicTacToe implements ActionListener {
                     if (buttons[i].getText().equals("")) {
                         buttons[i].setForeground(new Color(255, 0, 0));
                         buttons[i].setText("X");
+                        player1.add(i);
                         player1Turn = false;
                         textField.setText("O turn");
-                        check();
+                        check(player1);
                     }
                 } else {
                     if (buttons[i].getText().equals("")) {
                         buttons[i].setForeground(new Color(0, 0, 255));
                         buttons[i].setText("O");
+                        player2.add(i);
                         player1Turn = true;
                         textField.setText("X turn");
-                        check();
+                        check(player2);
                     }
                 }
             }
@@ -93,52 +132,12 @@ public class TicTacToe implements ActionListener {
         }
     }
 
-    public void check() {
-        for (int i = 0; i < winCombNums.length; i++) {
-            for (int j = 0; j < winCombNums[i].length; j++) {
-                
+    public void check(List<Integer> player) {
+        System.err.println(player);
+        for (int i = 0; i < winCombNums.size(); i++) {
+            if (Arrays.equals(winCombNums.get(i), player.toArray())) {
+                System.out.println("You win");
             }
-            if (buttons[i].getText().equals("X")) {
-
-            }
-        }
-
-        if (
-            (buttons[0].getText().equals("X")) && 
-            (buttons[1].getText().equals("X")) && 
-            (buttons[2].getText().equals("X"))) {
-                xWins(0, 1, 2);
-        }
-        if (
-            (buttons[0].getText().equals("X")) && 
-            (buttons[1].getText().equals("X")) && 
-            (buttons[2].getText().equals("X"))) {
-                xWins(0, 1, 2);
-        }
-        if (
-            (buttons[0].getText().equals("X")) && 
-            (buttons[1].getText().equals("X")) && 
-            (buttons[2].getText().equals("X"))) {
-                xWins(0, 1, 2);
-        }
-
-        if (
-            (buttons[0].getText().equals("X")) && 
-            (buttons[1].getText().equals("X")) && 
-            (buttons[2].getText().equals("X"))) {
-                oWins(0, 1, 2);
-        }
-        if (
-            (buttons[0].getText().equals("X")) && 
-            (buttons[1].getText().equals("X")) && 
-            (buttons[2].getText().equals("X"))) {
-                oWins(0, 1, 2);
-        }
-        if (
-            (buttons[0].getText().equals("X")) && 
-            (buttons[1].getText().equals("X")) && 
-            (buttons[2].getText().equals("X"))) {
-                oWins(0, 1, 2);
         }
     }
     
