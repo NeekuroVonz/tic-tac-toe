@@ -6,51 +6,17 @@ import java.util.List;
 import javax.swing.*;
 
 public class TicTacToe implements ActionListener {
-    Random random = new Random();
-    JFrame frame = new JFrame();
-    JPanel titlePanel = new JPanel();
-    JPanel buttonPanel = new JPanel();
-    JLabel textField = new JLabel();
-    JButton[] buttons = new JButton[9];
-    boolean player1Turn;
-    // int[][] winCombNumsNums = {{0,1,2},{3,4,5},{6,7,8}, {0,3,6},{1,4,7},{2,5,8}, {0,4,8},{2,4,6}};
-    Integer[] horizontalComb = {0,1,2};
-    Integer[] verticalComb = {0,3,6};
-    Integer[] specialComb1 = {0,4,8};
-    Integer[] specialComb2 = {2,4,6};
-    List<Integer[]> winCombNums = new ArrayList<>();
-    List<Integer> player1 = new ArrayList<>();
-    List<Integer> player2 = new ArrayList<>();
-
+    private Random random = new Random();
+    private JFrame frame = new JFrame();
+    private JPanel titlePanel = new JPanel();
+    private JPanel buttonPanel = new JPanel();
+    private JLabel textField = new JLabel();
+    private JButton[] buttons = new JButton[9];
+    private boolean player1Turn;
+    private int sizeNumb = 4;
+    private CalculateWinComb winCombNums = new CalculateWinComb(sizeNumb);
+    
     TicTacToe() {
-        winCombNums.add(horizontalComb.clone());
-        for (int i = 0; i < winCombNums.size(); i++) {
-            Integer[] temp;
-            if (!winCombNums.isEmpty() && winCombNums.size() < 3) {
-                for (int j = 0; j < horizontalComb.length; j++) {
-                    horizontalComb[j] += 3;
-                }
-                temp = horizontalComb.clone();
-                winCombNums.add(temp);
-                if (winCombNums.size() == 3) {
-                    winCombNums.add(verticalComb.clone());
-                }
-            } else {
-                for (int j = 0; j < verticalComb.length; j++) {
-                    verticalComb[j] += 1;
-                }
-                temp = verticalComb.clone();
-                if (winCombNums.size() >= 6) {
-                    winCombNums.add(specialComb1);
-                    winCombNums.add(specialComb2);
-                    break;
-                } else {
-                    winCombNums.add(temp);
-                }
-            }
-        }
-        System.out.println(Arrays.deepToString(winCombNums.toArray()));
-
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         frame.setSize(800, 800);
         frame.getContentPane().setBackground(new Color(255, 50, 50));
@@ -94,19 +60,15 @@ public class TicTacToe implements ActionListener {
                     if (buttons[i].getText().equals("")) {
                         buttons[i].setForeground(new Color(255, 0, 0));
                         buttons[i].setText("X");
-                        player1.add(i);
                         player1Turn = false;
                         textField.setText("O turn");
-                        check(player1);
                     }
                 } else {
                     if (buttons[i].getText().equals("")) {
                         buttons[i].setForeground(new Color(0, 0, 255));
                         buttons[i].setText("O");
-                        player2.add(i);
                         player1Turn = true;
                         textField.setText("X turn");
-                        check(player2);
                     }
                 }
             }
@@ -134,8 +96,8 @@ public class TicTacToe implements ActionListener {
 
     public void check(List<Integer> player) {
         System.err.println(player);
-        for (int i = 0; i < winCombNums.size(); i++) {
-            if (Arrays.equals(winCombNums.get(i), player.toArray())) {
+        for (int i = 0; i < winCombNums.getWinComb().size(); i++) {
+            if (Arrays.equals(winCombNums.getWinComb().get(i), player.toArray())) {
                 System.out.println("You win");
             }
         }
